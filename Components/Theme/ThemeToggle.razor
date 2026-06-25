@@ -1,3 +1,4 @@
+@implements IDisposable
 @inject ThemeService Theme
 
 <button @onclick="Umschalten"
@@ -9,5 +10,11 @@
 </button>
 
 @code {
+    protected override void OnInitialized() => Theme.OnChange += Aktualisieren;
+
     private async Task Umschalten() => await Theme.UmschaltenAsync();
+
+    private void Aktualisieren() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Theme.OnChange -= Aktualisieren;
 }
