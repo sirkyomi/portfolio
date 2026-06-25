@@ -27,56 +27,12 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 
-    <!--
-        Tailwind via Play CDN für sofort lauffähiges Gerüst.
-        PRODUKTION: stattdessen Tailwind-CLI-Build kompilieren (siehe README.md),
-        damit kein CDN-Skript zur Laufzeit nötig ist.
-    -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Cosy-Wood-Theme. Farben referenzieren CSS-Variablen (css/app.css),
-        // damit Light/Dark über EINEN Klassen-Switch (.dark) laufen.
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        bg:       'rgb(var(--c-bg) / <alpha-value>)',
-                        surface:  'rgb(var(--c-surface) / <alpha-value>)',
-                        elevated: 'rgb(var(--c-elevated) / <alpha-value>)',
-                        border:   'rgb(var(--c-border) / <alpha-value>)',
-                        text:     'rgb(var(--c-text) / <alpha-value>)',
-                        muted:    'rgb(var(--c-muted) / <alpha-value>)',
-                        wood: {
-                            DEFAULT: 'rgb(var(--c-wood) / <alpha-value>)',
-                            soft:    'rgb(var(--c-wood-soft) / <alpha-value>)',
-                        },
-                        ok:   'rgb(var(--c-ok) / <alpha-value>)',
-                        warn: 'rgb(var(--c-warn) / <alpha-value>)',
-                        info: 'rgb(var(--c-info) / <alpha-value>)',
-                    },
-                    fontFamily: {
-                        sans:  ['Inter', 'system-ui', 'sans-serif'],
-                        serif: ['Inter', 'system-ui', 'sans-serif'],
-                        mono:  ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-                    },
-                    borderRadius: { xl: '0.9rem', '2xl': '1.25rem' },
-                    boxShadow: {
-                        cosy: '0 8px 30px -12px rgb(0 0 0 / 0.45)',
-                        'cosy-light': '0 10px 30px -18px rgb(120 90 60 / 0.30)',
-                    },
-                },
-            },
-        };
-    </script>
-
     <!-- Prism.js: Syntax-Highlighting (Core + benötigte Sprachen). -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
 
     <!-- CSS-Variablen (Theme-Tokens) + Prism-Token-Farben + Feinschliff. -->
     <link rel="stylesheet" href="css/app.css" />

@@ -3,3 +3,7 @@ obj/
 publish/
 .vs/
 *.user
+
+# Tailwind: heruntergeladene CLI + generierte CSS (Build-Artefakt)
+.tools/
+wwwroot/css/app.css

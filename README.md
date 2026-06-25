@@ -7,7 +7,8 @@ ich tatsächlich arbeite. Eine geführte Tour nimmt einen dabei an die Hand.
 ## Was drinsteckt
 
 - **Blazor WebAssembly (.NET 10)** – komplett statisch, kein Backend
-- **Tailwind CSS** mit eigenem „Cosy Wood"-Theme (Light & Dark)
+- **Tailwind CSS** mit eigenem „Cosy Wood"-Theme (Light & Dark), beim Build
+  kompiliert (kein CDN)
 - **Font Awesome Free**, lokal eingebunden – kein CDN nötig
 - **Prism** fürs Syntax-Highlighting der gezeigten Dateien
 - Geführte Tour: Hallo → Werdegang → Teamleitung → Ausbildung → Tech-Stack → DevOps
@@ -19,6 +20,13 @@ dotnet run
 ```
 
 Danach die angezeigte URL im Browser öffnen.
+
+## Styles
+
+Tailwind wird über die Standalone-CLI kompiliert – kein Node nötig. Ein
+MSBuild-Target lädt die CLI einmalig herunter und erzeugt bei jedem
+`dotnet build`/`publish` aus `Styles/app.css` die Datei `wwwroot/css/app.css`
+(generiert, nicht eingecheckt). Konfiguration: `tailwind.config.js`.
 
 ## Deployment
 

@@ -12,4 +12,37 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.9" PrivateAssets="all" />
   </ItemGroup>
 
+  <!-- Tailwind CSS: Standalone-CLI (kein Node). Wird einmalig geladen und bei
+       jedem Build/Publish ausgeführt. Quelle: Styles/app.css -> wwwroot/css/app.css -->
+  <PropertyGroup>
+    <TailwindVersion>3.4.17</TailwindVersion>
+    <TailwindDir>$(MSBuildProjectDirectory)/.tools/tailwind</TailwindDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <TailwindFile>tailwindcss-windows-x64.exe</TailwindFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <TailwindFile>tailwindcss-linux-x64</TailwindFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <TailwindFile>tailwindcss-macos-arm64</TailwindFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TailwindBin>$(TailwindDir)/$(TailwindFile)</TailwindBin>
+    <TailwindUrl>https://github.com/tailwindlabs/tailwindcss/releases/download/v$(TailwindVersion)/$(TailwindFile)</TailwindUrl>
+  </PropertyGroup>
+
+  <Target Name="BuildTailwindCss"
+          BeforeTargets="ResolveStaticWebAssetsInputs;BeforeBuild;BeforePublish">
+    <MakeDir Directories="$(TailwindDir);$(MSBuildProjectDirectory)/wwwroot/css" />
+    <DownloadFile Condition="!Exists('$(TailwindBin)')"
+                  SourceUrl="$(TailwindUrl)"
+                  DestinationFolder="$(TailwindDir)"
+                  DestinationFileName="$(TailwindFile)"
+                  Retries="2" />
+    <Exec Condition="!$([MSBuild]::IsOSPlatform('Windows'))"
+          Command="chmod +x &quot;$(TailwindBin)&quot;" />
+    <Exec Command="&quot;$(TailwindBin)&quot; -c &quot;$(MSBuildProjectDirectory)/tailwind.config.js&quot; -i &quot;$(MSBuildProjectDirectory)/Styles/app.css&quot; -o &quot;$(MSBuildProjectDirectory)/wwwroot/css/app.css&quot; --minify" />
+  </Target>
+
 </Project>
