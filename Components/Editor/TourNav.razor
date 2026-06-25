@@ -1,0 +1,61 @@
+@inject VirtualFileSystem Vfs
+@inject EditorState Editor
+
+<nav class="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-surface px-6 py-3">
+        <div class="min-w-0 flex-1">
+        @if (Zurueck is { } z)
+        {
+            <button @onclick="() => Editor.Oeffnen(z)"
+                    class="group inline-flex items-center gap-2 text-sm text-muted transition hover:text-wood">
+                <Icon Name="arrow-left" Class="h-3 w-3 shrink-0" />
+                <span class="truncate">@z.Titel</span>
+            </button>
+        }
+    </div>
+
+        <div class="flex shrink-0 items-center gap-1.5">
+        @foreach (var (datei, i) in Vfs.Tour.Select((d, i) => (d, i)))
+        {
+            var aktiv = datei.Pfad == File.Pfad;
+            <button @onclick="() => Editor.Oeffnen(datei)"
+                    title="@datei.Titel"
+                    class="h-2 rounded-full transition-all
+                           @(aktiv ? "w-6 bg-wood" : "w-2 bg-border hover:bg-wood/50")">
+            </button>
+        }
+    </div>
+
+        <div class="flex min-w-0 flex-1 justify-end">
+        @if (Weiter is { } w)
+        {
+            <button @onclick="() => Editor.Oeffnen(w)"
+                    class="inline-flex items-center gap-2 rounded-lg bg-wood px-4 py-2 text-sm
+                           font-semibold text-white transition hover:brightness-110">
+                <span class="truncate">@w.Titel</span>
+                <Icon Name="arrow-right" Class="h-3 w-3 shrink-0" />
+            </button>
+        }
+        else
+        {
+            <div class="flex items-center gap-3">
+                <span class="hidden text-sm text-muted sm:inline">Danke fürs Lesen. Sprechen wir?</span>
+                <a href="https://www.linkedin.com/in/elias-constantin-regber-aa7513261/"
+                   target="_blank" rel="noopener"
+                   class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-text/85
+                          transition hover:border-wood hover:text-wood">LinkedIn</a>
+                <a href="mailto:mail@@eliasregber.de"
+                   class="inline-flex items-center gap-2 rounded-lg bg-wood px-4 py-2 text-sm
+                          font-semibold text-white transition hover:brightness-110">
+                    Kontakt aufnehmen <Icon Name="arrow-right" Class="h-3 w-3 shrink-0" />
+                </a>
+            </div>
+        }
+    </div>
+</nav>
+
+@code {
+    [Parameter, EditorRequired] public VirtualFile File { get; set; } = default!;
+
+    private VirtualFile? Zurueck => Vfs.Zurueck(File);
+    private VirtualFile? Weiter => Vfs.Weiter(File);
+}

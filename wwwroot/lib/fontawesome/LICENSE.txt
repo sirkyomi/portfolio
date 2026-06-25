@@ -1,0 +1,12 @@
+Font Awesome Free 6.7.2
+https://fontawesome.com
+https://fontawesome.com/license/free
+
+Icons: CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
+Fonts: SIL OFL 1.1 License
+Code: MIT License
+Copyright 2024 Fonticons, Inc.
+
+Nur die hier tatsächlich verwendeten SVGs sind eingebunden. Die Pfaddaten
+werden zusätzlich in Components/Icons/Icon.razor inline gerendert (currentColor),
+damit die Symbole das aktive Theme übernehmen.

@@ -1,0 +1,72 @@
+@implements IDisposable
+@inject EditorState Editor
+@inject VirtualFileSystem Vfs
+
+@if (Node.IstOrdner)
+{
+    <button @onclick="Umschalten"
+            style="padding-left:@(Einzug)px"
+            class="flex w-full items-center gap-1.5 rounded-md py-1 pr-2 text-sm text-text/90
+                   transition hover:bg-elevated">
+        <Icon Name="chevron-right"
+              Class="@($"h-2.5 w-2.5 shrink-0 text-muted transition-transform {(Offen ? "rotate-90" : "")}")" />
+        <Icon Name="@(Offen ? "folder-open" : "folder")" Class="h-3.5 w-3.5 shrink-0 text-wood" />
+        <span class="truncate">@Node.Name</span>
+    </button>
+
+    @if (Offen)
+    {
+        foreach (var kind in Node.Kinder)
+        {
+            <FileTreeNode Node="kind" Tiefe="Tiefe + 1" />
+        }
+    }
+}
+else
+{
+    <button @onclick="Oeffnen"
+            style="padding-left:@(Einzug + 18)px"
+            class="flex w-full items-center gap-1.5 rounded-md py-1 pr-2 text-sm transition
+                   @(IstAktiv ? "bg-elevated text-wood" : "text-text/80 hover:bg-elevated")">
+        <Icon Name="@DateiIcon" Class="@($"h-3.5 w-3.5 shrink-0 {DateiFarbe}")" />
+        <span class="truncate">@Node.Name</span>
+    </button>
+}
+
+@code {
+    [Parameter, EditorRequired] public TreeNode Node { get; set; } = default!;
+    [Parameter] public int Tiefe { get; set; }
+
+    private bool Offen;
+
+    private int Einzug => 8 + Tiefe * 12;
+    private bool IstAktiv => !Node.IstOrdner && Editor.Aktiv?.Pfad == Node.Pfad;
+
+    private string DateiIcon => Node.Name.EndsWith(".md") ? "file-lines" : "file-code";
+
+    private string DateiFarbe => Node.Name switch
+    {
+        var n when n.EndsWith(".cs")   => "text-info",
+        var n when n.EndsWith(".json") => "text-warn",
+        var n when n.EndsWith(".yml")  => "text-wood",
+        _ => "text-muted",
+    };
+
+    protected override void OnInitialized()
+    {
+        Offen = Node.StandardOffen;
+        Editor.OnChange += Aktualisieren;
+    }
+
+    private void Umschalten() => Offen = !Offen;
+
+    private void Oeffnen()
+    {
+        var datei = Vfs.Holen(Node.Pfad!);
+        if (datei is not null) Editor.Oeffnen(datei);
+    }
+
+    private void Aktualisieren() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Editor.OnChange -= Aktualisieren;
+}

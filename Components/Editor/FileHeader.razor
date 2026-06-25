@@ -1,0 +1,38 @@
+@inject VirtualFileSystem Vfs
+
+<div class="sticky top-0 z-30 flex h-[76px] flex-col justify-center bg-surface px-6 sm:px-8">
+    <div class="mx-auto w-full max-w-3xl">
+        <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-muted">
+            <span>@File.Pfad</span>
+            @if (Nummer > 0)
+            {
+                <span class="text-muted/60">·</span>
+                <span>Schritt @Nummer / @Vfs.TourGesamt</span>
+            }
+        </div>
+        <h2 class="mt-0.5 text-2xl font-semibold tracking-tight text-text">@File.Titel</h2>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(File.Kontext))
+{
+    <div class="bg-surface px-6 pb-6 pt-1 sm:px-8">
+        <div class="mx-auto max-w-3xl space-y-3 text-[15px] leading-relaxed text-text/80">
+            @foreach (var absatz in Absaetze)
+            {
+                <p>@absatz</p>
+            }
+        </div>
+    </div>
+}
+
+<div class="sticky top-[76px] z-20 h-px bg-border"></div>
+
+@code {
+    [Parameter, EditorRequired] public VirtualFile File { get; set; } = default!;
+
+    private int Nummer => Vfs.TourNummer(File);
+
+    private IEnumerable<string> Absaetze =>
+        (File.Kontext ?? "").Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
+}

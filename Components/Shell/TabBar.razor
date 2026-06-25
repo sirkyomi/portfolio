@@ -1,0 +1,31 @@
+@implements IDisposable
+@inject EditorState Editor
+
+<div class="flex h-10 shrink-0 items-stretch overflow-x-auto border-b border-border bg-surface">
+    @foreach (var datei in Editor.Offen)
+    {
+        var aktiv = Editor.Aktiv == datei;
+        <div @onclick="() => Editor.Aktivieren(datei)"
+             class="group flex cursor-pointer items-center gap-2 border-r border-border px-3
+                    font-mono text-xs transition
+                    @(aktiv
+                        ? "bg-bg text-text border-t-2 border-t-wood"
+                        : "bg-surface text-muted hover:bg-elevated")">
+            <span class="truncate">@datei.Name</span>
+            <button @onclick:stopPropagation="true"
+                    @onclick="() => Editor.Schliessen(datei)"
+                    title="Schließen"
+                    class="grid h-4 w-4 place-items-center rounded text-muted opacity-0
+                           transition hover:bg-border hover:text-text group-hover:opacity-100
+                           @(aktiv ? "opacity-60" : "")">
+                ×
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized() => Editor.OnChange += Aktualisieren;
+    private void Aktualisieren() => InvokeAsync(StateHasChanged);
+    public void Dispose() => Editor.OnChange -= Aktualisieren;
+}

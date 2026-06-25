@@ -1,0 +1,21 @@
+@inject VirtualFileSystem Vfs
+
+<aside class="flex w-64 shrink-0 flex-col border-r border-border bg-surface">
+    <div class="flex-1 overflow-y-auto pb-2">
+        <TourPanel />
+
+        <div class="mt-3 border-t border-border pt-2">
+            <div class="px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted">
+                Explorer
+            </div>
+            <nav class="px-2">
+                @foreach (var knoten in Vfs.Wurzel)
+                {
+                    <FileTreeNode Node="knoten" Tiefe="0" />
+                }
+            </nav>
+        </div>
+    </div>
+
+    <ProfileLinks />
+</aside>

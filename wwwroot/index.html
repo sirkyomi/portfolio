@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elias-Constantin Regber — Developer Portfolio</title>
+    <meta name="description"
+          content="Full-Stack Developer, Teamleiter & Ausbilder — Resume 2.0 als IDE." />
+    <base href="/" />
+    <link rel="preload" id="webassembly" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    <!-- Theme früh anwenden: verhindert hellen Blitz (FOUC) im Dark Mode. -->
+    <script>
+        (function () {
+            const gespeichert = localStorage.getItem('theme');
+            const dunkel = gespeichert === 'dark'
+                || (!gespeichert && matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', dunkel);
+        })();
+    </script>
+
+    <!-- Schriften: Inter (UI), Fraunces (elegante Headlines), JetBrains Mono (Code). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!--
+        Tailwind via Play CDN für sofort lauffähiges Gerüst.
+        PRODUKTION: stattdessen Tailwind-CLI-Build kompilieren (siehe README.md),
+        damit kein CDN-Skript zur Laufzeit nötig ist.
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cosy-Wood-Theme. Farben referenzieren CSS-Variablen (css/app.css),
+        // damit Light/Dark über EINEN Klassen-Switch (.dark) laufen.
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bg:       'rgb(var(--c-bg) / <alpha-value>)',
+                        surface:  'rgb(var(--c-surface) / <alpha-value>)',
+                        elevated: 'rgb(var(--c-elevated) / <alpha-value>)',
+                        border:   'rgb(var(--c-border) / <alpha-value>)',
+                        text:     'rgb(var(--c-text) / <alpha-value>)',
+                        muted:    'rgb(var(--c-muted) / <alpha-value>)',
+                        wood: {
+                            DEFAULT: 'rgb(var(--c-wood) / <alpha-value>)',
+                            soft:    'rgb(var(--c-wood-soft) / <alpha-value>)',
+                        },
+                        ok:   'rgb(var(--c-ok) / <alpha-value>)',
+                        warn: 'rgb(var(--c-warn) / <alpha-value>)',
+                        info: 'rgb(var(--c-info) / <alpha-value>)',
+                    },
+                    fontFamily: {
+                        sans:  ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Inter', 'system-ui', 'sans-serif'],
+                        mono:  ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+                    },
+                    borderRadius: { xl: '0.9rem', '2xl': '1.25rem' },
+                    boxShadow: {
+                        cosy: '0 8px 30px -12px rgb(0 0 0 / 0.45)',
+                        'cosy-light': '0 10px 30px -18px rgb(120 90 60 / 0.30)',
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- Prism.js: Syntax-Highlighting (Core + benötigte Sprachen). -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+
+    <!-- CSS-Variablen (Theme-Tokens) + Prism-Token-Farben + Feinschliff. -->
+    <link rel="stylesheet" href="css/app.css" />
+
+    <script type="importmap"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#a39689;background:#1c1917;">
+            Lade Arbeitsbereich&nbsp;…
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        Ein unerwarteter Fehler ist aufgetreten.
+        <a href="." class="reload">Neu laden</a>
+        <span class="dismiss">🗙</span>
+    </div>
+
+    <!-- JS-Interop-Module -->
+    <script src="js/theme.js"></script>
+    <script src="js/prism-interop.js"></script>
+    <script src="js/clipboard.js"></script>
+    <script src="js/annotations.js"></script>
+
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+@inject ThemeService Theme
+
+<button @onclick="Umschalten"
+        title="@(Theme.IstDunkel ? "Zu Light Mode wechseln" : "Zu Dark Mode wechseln")"
+        aria-label="Theme umschalten"
+        class="grid h-8 w-8 place-items-center rounded-lg text-muted transition
+               hover:bg-elevated hover:text-wood">
+    <Icon Name="@(Theme.IstDunkel ? "sun" : "moon")" Class="h-[18px] w-[18px]" />
+</button>
+
+@code {
+    private async Task Umschalten() => await Theme.UmschaltenAsync();
+}

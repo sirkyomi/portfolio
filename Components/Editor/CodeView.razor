@@ -1,0 +1,72 @@
+@implements IDisposable
+@inject IJSRuntime JS
+
+<div class="min-w-full py-4 font-mono text-[13px] leading-6">
+    @for (var i = 0; i < _rohzeilen.Length; i++)
+    {
+        var nr = i + 1;
+        var annotation = Annotation(nr);
+        var hatTooltip = annotation is not null;
+
+        <div class="flex items-start @(hatTooltip ? "anno-zeile" : "border-l-2 border-transparent")"
+             data-anno="@(hatTooltip ? "1" : null)"
+             data-anno-titel="@annotation?.Titel"
+             data-anno-text="@annotation?.Beschreibung">
+
+            <span class="w-12 shrink-0 select-none pr-3 text-right text-muted/60">@nr</span>
+
+            <span class="flex h-6 w-5 shrink-0 select-none items-center justify-center text-wood">
+                @if (hatTooltip)
+                {
+                    <Icon Name="circle-info" Class="h-3.5 w-3.5" />
+                }
+            </span>
+
+            <code class="language-@File.Sprache whitespace-pre pr-6">@Inhalt(i)</code>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public VirtualFile File { get; set; } = default!;
+
+    private string[] _rohzeilen = [];
+    private string[]? _hervorgehoben;          // HTML pro Zeile (von Prism)
+    private string? _gehighlightetPfad;
+    private Dictionary<int, CodeAnnotation> _annotationen = new();
+
+    protected override void OnParametersSet()
+    {
+        _rohzeilen = File.Inhalt.Split('\n');
+        _annotationen = File.Annotationen.ToDictionary(a => a.Zeile);
+
+        if (_gehighlightetPfad != File.Pfad)
+            _hervorgehoben = null;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_hervorgehoben is null || _gehighlightetPfad != File.Pfad)
+        {
+            _hervorgehoben = await JS.InvokeAsync<string[]>(
+                "prismInterop.highlightLines", File.Inhalt, File.Sprache);
+            _gehighlightetPfad = File.Pfad;
+            StateHasChanged();
+        }
+    }
+
+    private CodeAnnotation? Annotation(int zeile) =>
+        _annotationen.TryGetValue(zeile, out var a) ? a : null;
+
+    // Vor dem Highlight: Klartext-Fallback. Danach: Prism-HTML.
+    private MarkupString Inhalt(int index)
+    {
+        if (_hervorgehoben is not null && index < _hervorgehoben.Length)
+            return (MarkupString)_hervorgehoben[index];
+
+        var roh = _rohzeilen[index];
+        return (MarkupString)(roh.Length == 0 ? "&nbsp;" : System.Net.WebUtility.HtmlEncode(roh));
+    }
+
+    public void Dispose() { }
+}

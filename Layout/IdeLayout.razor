@@ -1,0 +1,38 @@
+@implements IDisposable
+@inject ThemeService Theme
+@inject EditorState Editor
+@inject VirtualFileSystem Vfs
+
+<div class="flex h-screen w-screen flex-col overflow-hidden bg-bg font-sans text-text">
+    <TitleBar />
+
+    <div class="flex min-h-0 flex-1">
+        <Sidebar />
+        <main class="flex min-w-0 flex-1 flex-col">
+            <TabBar />
+            <EditorHost />
+        </main>
+    </div>
+
+    <StatusBar />
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Theme.OnChange += Aktualisieren;
+
+        if (Editor.Aktiv is null)
+            Editor.Oeffnen(Vfs.Standarddatei);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await Theme.InitAsync();
+    }
+
+    private void Aktualisieren() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Theme.OnChange -= Aktualisieren;
+}

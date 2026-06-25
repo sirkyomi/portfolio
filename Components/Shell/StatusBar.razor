@@ -1,0 +1,55 @@
+@implements IDisposable
+@inject PingService Ping
+@inject EditorState Editor
+
+<footer class="flex h-7 shrink-0 items-center justify-between bg-wood px-3 font-mono text-[11px] text-white">
+    <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1.5" title="Aktueller Git-Branch">
+            <Icon Name="code-branch" Class="h-3 w-3" />
+            branch: @Ping.Branch
+        </span>
+
+        <span class="flex items-center gap-1.5" title="Status der Azure-DevOps-Pipeline">
+            <Icon Name="circle-check" Class="h-3 w-3" />
+            pipeline: @Ping.Pipeline
+        </span>
+    </div>
+
+    <div class="flex items-center gap-4">
+        @if (Editor.Aktiv is { } datei)
+        {
+            <span title="Sprache">@Sprache(datei.Sprache)</span>
+            <span title="Zeilen">@datei.ZeilenAnzahl Zeilen</span>
+        }
+        <span>UTF-8</span>
+        <span class="flex items-center gap-1.5" title="Simulierter API-Ping">
+            <Icon Name="wifi" Class="h-3 w-3" />
+            api: @Ping.LatenzMs ms
+        </span>
+    </div>
+</footer>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Ping.OnTick += Aktualisieren;
+        Editor.OnChange += Aktualisieren;
+    }
+
+    private static string Sprache(string s) => s switch
+    {
+        "csharp" => "C#",
+        "json" => "JSON",
+        "yaml" => "YAML",
+        "markdown" => "Markdown",
+        _ => s,
+    };
+
+    private void Aktualisieren() => InvokeAsync(StateHasChanged);
+
+    public void Dispose()
+    {
+        Ping.OnTick -= Aktualisieren;
+        Editor.OnChange -= Aktualisieren;
+    }
+}

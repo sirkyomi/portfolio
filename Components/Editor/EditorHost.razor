@@ -1,0 +1,48 @@
+@implements IDisposable
+@inject EditorState Editor
+
+@if (Editor.Aktiv is { } datei)
+{
+    <div class="flex min-h-0 flex-1 flex-col" @key="datei.Pfad">
+        <div class="min-h-0 flex-1 overflow-auto bg-bg">
+            @if (datei.Ansicht is EditorAnsicht.Hero)
+            {
+                <IntroHero />
+            }
+            else
+            {
+                <FileHeader File="datei" />
+
+                @switch (datei.Ansicht)
+                {
+                    case EditorAnsicht.Zeitstrahl:
+                        <Timeline />
+                        break;
+                    default:
+                        <CodeView File="datei" />
+                        break;
+                }
+            }
+        </div>
+
+        @if (datei.Ansicht is not EditorAnsicht.Hero)
+        {
+            <TourNav File="datei" />
+        }
+    </div>
+}
+else
+{
+    <div class="grid min-h-0 flex-1 place-items-center text-muted">
+        <div class="text-center">
+            <div class="mb-2 text-2xl font-semibold tracking-tight text-text">Willkommen</div>
+            <p class="text-sm">Wähle links eine Station aus der Tour.</p>
+        </div>
+    </div>
+}
+
+@code {
+    protected override void OnInitialized() => Editor.OnChange += Aktualisieren;
+    private void Aktualisieren() => InvokeAsync(StateHasChanged);
+    public void Dispose() => Editor.OnChange -= Aktualisieren;
+}

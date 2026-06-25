@@ -1,0 +1,33 @@
+@implements IDisposable
+@inject VirtualFileSystem Vfs
+@inject EditorState Editor
+
+<div class="px-2 pt-2">
+    <div class="px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted">
+        Geführte Tour
+    </div>
+
+    <ol class="space-y-0.5">
+        @foreach (var (datei, i) in Vfs.Tour.Select((d, idx) => (d, idx)))
+        {
+            var aktiv = Editor.Aktiv?.Pfad == datei.Pfad;
+            <li>
+                <button @onclick="() => Editor.Oeffnen(datei)"
+                        class="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm transition
+                               @(aktiv ? "bg-elevated text-text" : "text-text/80 hover:bg-elevated")">
+                    <span class="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[11px] font-semibold
+                                 @(aktiv ? "bg-wood text-white" : "bg-surface text-muted ring-1 ring-border")">
+                        @(i + 1)
+                    </span>
+                    <span class="truncate">@datei.Titel</span>
+                </button>
+            </li>
+        }
+    </ol>
+</div>
+
+@code {
+    protected override void OnInitialized() => Editor.OnChange += Aktualisieren;
+    private void Aktualisieren() => InvokeAsync(StateHasChanged);
+    public void Dispose() => Editor.OnChange -= Aktualisieren;
+}

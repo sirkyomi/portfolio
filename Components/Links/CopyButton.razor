@@ -1,0 +1,26 @@
+@inject IJSRuntime JS
+
+<button @onclick="Kopieren"
+        title="In Zwischenablage kopieren"
+        class="inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-0.5 text-[11px]
+               font-medium text-muted transition hover:border-wood hover:text-wood">
+    <Icon Name="@(_kopiert ? "circle-check" : "copy")" Class="h-3 w-3" />
+    @(_kopiert ? "Kopiert!" : "Kopieren")
+</button>
+
+@code {
+    [Parameter, EditorRequired] public string Text { get; set; } = "";
+
+    private bool _kopiert;
+
+    private async Task Kopieren()
+    {
+        await JS.InvokeAsync<bool>("clipboardInterop.copy", Text);
+        _kopiert = true;
+        StateHasChanged();
+
+        await Task.Delay(1500);
+        _kopiert = false;
+        StateHasChanged();
+    }
+}

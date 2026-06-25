@@ -1,0 +1,27 @@
+<div class="space-y-1.5 border-t border-border p-3">
+    <a href="https://github.com/sirkyomi" target="_blank" rel="noopener"
+       class="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-text/85
+              transition hover:bg-elevated hover:text-wood">
+        <Icon Name="github" Class="h-4 w-4 shrink-0" />
+        <span>GitHub</span>
+    </a>
+
+    <a href="https://www.linkedin.com/in/elias-constantin-regber-aa7513261/" target="_blank" rel="noopener"
+       class="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm text-text/85
+              transition hover:bg-elevated hover:text-wood">
+        <Icon Name="linkedin-in" Class="h-4 w-4 shrink-0" />
+        <span>LinkedIn</span>
+    </a>
+
+    <div class="flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm text-text/85">
+        <div class="flex min-w-0 items-center gap-2.5">
+            <Icon Name="envelope" Class="h-4 w-4 shrink-0 text-muted" />
+            <span class="truncate font-mono text-xs">@Email</span>
+        </div>
+        <CopyButton Text="@Email" />
+    </div>
+</div>
+
+@code {
+    private const string Email = "mail@eliasregber.de";
+}
