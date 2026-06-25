@@ -13,5 +13,6 @@ builder.Services.AddSingleton<ThemeService>();
 builder.Services.AddSingleton<VirtualFileSystem>();
 builder.Services.AddSingleton<EditorState>();
 builder.Services.AddSingleton<PingService>();
+builder.Services.AddSingleton<UiState>();
 
 await builder.Build().RunAsync();

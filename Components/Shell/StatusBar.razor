@@ -2,26 +2,26 @@
 @inject PingService Ping
 @inject EditorState Editor
 
-<footer class="flex h-7 shrink-0 items-center justify-between bg-wood px-3 font-mono text-[11px] text-white">
-    <div class="flex items-center gap-4">
+<footer class="flex h-7 shrink-0 items-center justify-between gap-3 overflow-hidden bg-wood px-3 font-mono text-[11px] text-white">
+    <div class="flex items-center gap-3 sm:gap-4">
         <span class="flex items-center gap-1.5" title="Aktueller Git-Branch">
             <Icon Name="code-branch" Class="h-3 w-3" />
-            branch: @Ping.Branch
+            <span><span class="hidden sm:inline">branch: </span>@Ping.Branch</span>
         </span>
 
         <span class="flex items-center gap-1.5" title="Status der Azure-DevOps-Pipeline">
             <Icon Name="circle-check" Class="h-3 w-3" />
-            pipeline: @Ping.Pipeline
+            <span class="hidden sm:inline">pipeline: </span>@Ping.Pipeline
         </span>
     </div>
 
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3 sm:gap-4">
         @if (Editor.Aktiv is { } datei)
         {
-            <span title="Sprache">@Sprache(datei.Sprache)</span>
-            <span title="Zeilen">@datei.ZeilenAnzahl Zeilen</span>
+            <span class="hidden sm:inline" title="Sprache">@Sprache(datei.Sprache)</span>
+            <span class="hidden md:inline" title="Zeilen">@datei.ZeilenAnzahl Zeilen</span>
         }
-        <span>UTF-8</span>
+        <span class="hidden md:inline">UTF-8</span>
         <span class="flex items-center gap-1.5" title="Simulierter API-Ping">
             <Icon Name="wifi" Class="h-3 w-3" />
             api: @Ping.LatenzMs ms

@@ -2,12 +2,20 @@
 @inject ThemeService Theme
 @inject EditorState Editor
 @inject VirtualFileSystem Vfs
+@inject UiState Ui
 
 <div class="flex h-screen w-screen flex-col overflow-hidden bg-bg font-sans text-text">
     <TitleBar />
 
-    <div class="flex min-h-0 flex-1">
+    <div class="relative flex min-h-0 flex-1">
         <Sidebar />
+
+        @if (Ui.SidebarOffen)
+        {
+            <div @onclick="Ui.SchliesseSidebar"
+                 class="fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
+        }
+
         <main class="flex min-w-0 flex-1 flex-col">
             <TabBar />
             <EditorHost />
@@ -21,6 +29,8 @@
     protected override void OnInitialized()
     {
         Theme.OnChange += Aktualisieren;
+        Ui.OnChange += Aktualisieren;
+        Editor.OnChange += SchliesseSidebar;
 
         if (Editor.Aktiv is null)
             Editor.Oeffnen(Vfs.Standarddatei);
@@ -33,6 +43,12 @@
     }
 
     private void Aktualisieren() => InvokeAsync(StateHasChanged);
+    private void SchliesseSidebar() => Ui.SchliesseSidebar();
 
-    public void Dispose() => Theme.OnChange -= Aktualisieren;
+    public void Dispose()
+    {
+        Theme.OnChange -= Aktualisieren;
+        Ui.OnChange -= Aktualisieren;
+        Editor.OnChange -= SchliesseSidebar;
+    }
 }

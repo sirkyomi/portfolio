@@ -1,30 +1,32 @@
 @implements IDisposable
 @inject IJSRuntime JS
 
-<div class="min-w-full py-4 font-mono text-[13px] leading-6">
-    @for (var i = 0; i < _rohzeilen.Length; i++)
-    {
-        var nr = i + 1;
-        var annotation = Annotation(nr);
-        var hatTooltip = annotation is not null;
+<div class="overflow-x-auto">
+    <div class="w-max min-w-full py-4 font-mono text-[13px] leading-6">
+        @for (var i = 0; i < _rohzeilen.Length; i++)
+        {
+            var nr = i + 1;
+            var annotation = Annotation(nr);
+            var hatTooltip = annotation is not null;
 
-        <div class="flex items-start @(hatTooltip ? "anno-zeile" : "border-l-2 border-transparent")"
-             data-anno="@(hatTooltip ? "1" : null)"
-             data-anno-titel="@annotation?.Titel"
-             data-anno-text="@annotation?.Beschreibung">
+            <div class="flex items-start @(hatTooltip ? "anno-zeile" : "border-l-2 border-transparent")"
+                 data-anno="@(hatTooltip ? "1" : null)"
+                 data-anno-titel="@annotation?.Titel"
+                 data-anno-text="@annotation?.Beschreibung">
 
-            <span class="w-12 shrink-0 select-none pr-3 text-right text-muted/60">@nr</span>
+                <span class="w-12 shrink-0 select-none pr-3 text-right text-muted/60">@nr</span>
 
-            <span class="flex h-6 w-5 shrink-0 select-none items-center justify-center text-wood">
-                @if (hatTooltip)
-                {
-                    <Icon Name="circle-info" Class="h-3.5 w-3.5" />
-                }
-            </span>
+                <span class="flex h-6 w-5 shrink-0 select-none items-center justify-center text-wood">
+                    @if (hatTooltip)
+                    {
+                        <Icon Name="circle-info" Class="h-3.5 w-3.5" />
+                    }
+                </span>
 
-            <code class="language-@File.Sprache whitespace-pre pr-6">@Inhalt(i)</code>
-        </div>
-    }
+                <code class="language-@File.Sprache whitespace-pre pr-6">@Inhalt(i)</code>
+            </div>
+        }
+    </div>
 </div>
 
 @code {

@@ -4,7 +4,7 @@
 @if (Editor.Aktiv is { } datei)
 {
     <div class="flex min-h-0 flex-1 flex-col" @key="datei.Pfad">
-        <div class="min-h-0 flex-1 overflow-auto bg-bg">
+        <div class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden bg-bg">
             @if (datei.Ansicht is EditorAnsicht.Hero)
             {
                 <IntroHero />
